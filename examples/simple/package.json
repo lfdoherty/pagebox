@@ -1,0 +1,16 @@
+{
+  "name": "pagebox-example-simple",
+  "version": "0.0.1",
+  "description": "Simple example of using pagebox to create a web app.",
+  "author": "Liam Doherty",
+  "main": "main",
+  "dependencies": {
+  	"plantbox": ">=0.0.1"
+  },
+  "devDependencies": {
+    "tap": "~0.4.3"
+  },
+  "scripts": {
+    "test": "tap ./test"
+  }
+}
