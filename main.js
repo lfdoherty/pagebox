@@ -58,17 +58,20 @@ module.exports = function(module){
 		
 		return {
 			get: function(config, cb){
-				console.log('getting')
+				//console.log('getting')
 				if(typeof(config) === 'string'){
 					config = {url: config}
 				}
+
+				var jar = request.jar()
+				var req = request.defaults({jar: jar})
 				
 				if(config.cookie){
 					var cookie = req.cookie(config.cookie)//'SID='+query.token+'|'+query.userId)
-					j.add(cookie)
+					jar.add(cookie)
 				}
 
-				console.log('planting')
+				//console.log('planting')
 				
 				var gFolder
 				var overlayPlant = overlayPlantMaker.plant(function(generationFolder){
@@ -79,6 +82,9 @@ module.exports = function(module){
 					windowModule.document.addEventListener = function(){
 					}
 					windowModule.addEventListener = function(){
+					}
+					windowModule.open = function(){
+						//TODO
 					}
 					windowModule.document.createElement = function(){
 					}
@@ -119,13 +125,13 @@ module.exports = function(module){
 					}
 				})
 				
-				console.log('done planting')
+				//console.log('done planting')
 
 				var cdl = _.latch(dynamicsToCache.length, function(){
 
-					console.log('dynamics loaded: ' + dynamicsToCache.length)
+					//console.log('dynamics loaded: ' + dynamicsToCache.length)
 					
-					req.get({url: config.url, followRedirect: false, jar: j}, function(err, res, body){
+					req.get({url: config.url, followRedirect: false, jar: jar}, function(err, res, body){
 						if(err){
 							cb(err)
 							return
@@ -157,7 +163,7 @@ module.exports = function(module){
 					
 						var params = JSON.parse(paramsStr)
 				
-						console.log('running plant with context')
+						//console.log('running plant with context')
 						var plant = overlayPlant.run(params)
 						cb(undefined, plant)
 					})
@@ -166,14 +172,14 @@ module.exports = function(module){
 				var dynamicRequestCache = {}
 				
 				dynamicsToCache.forEach(function(dtc){
-					req.get({url: serverPath+'js/'+dtc.name, followRedirect: false, jar: j}, function(err, res, body){
+					req.get({url: serverPath+'js/'+dtc.name, followRedirect: false, jar: jar}, function(err, res, body){
 						//_.errout('TODO: get ' + JSON.stringify(dtc) + ' ' + body)
 						//_module_wrapper
 						var shortName = dtc.name.substr(0, dtc.name.length-3)
 						var newSrc = 'var window = {};var dynamic_' + shortName + ' = module.exports;\n'
 						newSrc += 'dynamic_'+shortName+'._module_wrapper = module;\n'
 						
-						console.log('newSrc: ' + newSrc)
+						//console.log('newSrc: ' + newSrc)
 						
 						newSrc += body
 						fs.writeFileSync(gFolder+dtc.path, newSrc)
