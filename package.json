@@ -1,11 +1,11 @@
 {
   "name": "pagebox",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Glue module for decoupling webpages from the browser, built on plantbox.",
   "author": "Liam Doherty",
   "main": "main",
   "dependencies": {
-    "plantbox": ">=0.0.1",
+    "plantbox": "git://github.com/lfdoherty/plantbox.git", 
     "request": "~2.25.0"
   },
   "devDependencies": {
